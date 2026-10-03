@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { JSX, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import Image from 'next/image';
@@ -31,7 +31,7 @@ export default function LoginPage(): JSX.Element {
 
   return (
     <div id="login-screen" className="login-screen">
-      {/* Left image — desktop only */}
+
       <div className="login-hero" aria-hidden="true">
         <Image
           src="/login-bg.jpg"
@@ -44,34 +44,34 @@ export default function LoginPage(): JSX.Element {
         <div className="login-hero-overlay" />
       </div>
 
-      {/* Form column — full width on mobile/tablet, right half on desktop */}
       <div className="login-form-col">
         <div className="login-box">
-          <div className="login-logo">
-            <i className="ti ti-school" />
+          <div className="login-logo" style={{display: 'flex',justifyContent: 'center',alignItems: 'center',    marginBottom: '12px',}}>
+
+            <img src="/icons/student.png" alt="logo" style={{ height: '60px',width: '60px',objectFit: 'contain',display: 'block',}}/>
           </div>
           <div className="login-title">Tuition Tracker</div>
           <div className="login-sub">Sign in to manage your classes</div>
 
           {error && (
             <div className="login-err">
-              <i className="ti ti-alert-circle" /> {error}
+              <i className="ti ti-alert-square-rounded"></i>{error}
             </div>
           )}
 
           <form onSubmit={doLogin}>
-            <div className="form-group">
-              <label htmlFor="username">Username or Email</label>
+            <div className="formGroup">
+              <label htmlFor="username">Email</label>
               <input
                 id="username"
                 value={email}
                 onChange={(e: React.ChangeEvent<HTMLInputElement>) => setEmail(e.target.value)}
-                placeholder="yasiru or 123@gmail.com"
+                placeholder="123@gmail.com"
                 type="text"
                 required
               />
             </div>
-            <div className="form-group">
+            <div className="formGroup">
               <label htmlFor="password">Password</label>
               <input
                 id="password"
@@ -85,10 +85,10 @@ export default function LoginPage(): JSX.Element {
             <button
               type="submit"
               disabled={busy}
-              className="btn btn-primary"
+              className="signinbtn"
               style={{ width: '100%', justifyContent: 'center', padding: '11px' }}
             >
-              <i className="ti ti-login" /> {busy ? 'Signing in…' : 'Sign in'}
+               {busy ? 'Signing in…' : 'Sign in'}
             </button>
           </form>
 

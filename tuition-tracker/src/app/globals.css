@@ -1,4 +1,7 @@
-@import "tailwindcss";
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
 
 :root {
   --black:#000000;
@@ -71,7 +74,8 @@ body {
 }
 
 .login-hero {
-  display: none; /* hidden below desktop */
+  display: none; 
+  position: relative;
 }
 
 .login-form-col {
@@ -107,33 +111,28 @@ body {
   color: var(--muted-foreground);
   margin-bottom: 28px;
 }
-.login-box .form-group {
+.login-box .formGroup {
   text-align: left;
   margin-bottom: 14px;
 }
-.form-group label {
+.formGroup label {
     margin-bottom: 0.25rem;
     display: block;
     line-height: 1.4;
     font-weight: 500;
 }
-.form-group input, .form-group select, .form-group textarea {
+.formGroup input {
     width: 100%;
     border-radius: 0.5rem;
     border-width: 1px;
-    --tw-border-opacity: 1;
-    border-color: lab(var(--border-raw) / var1
-(--tw-border-opacity, 1));
-    --tw-bg-opacity: 1;
-    background-color: lab(var(--card2-raw) / var(--tw-bg-opacity, 1));
+    background-color: #f5f5f5;
     padding-left: 0.75rem;
     padding-right: 0.75rem;
     padding-top: 0.5rem;
     padding-bottom: 0.5rem;
     font-size: 0.875rem;
     line-height: 1.25rem;
-    --tw-text-opacity: 1;
-    color: lab(var(--foreground-raw) / var(--tw-text-opacity, 1));
+    color: #0a0a0a;
     outline: 2px solid transparent;
     outline-offset: 2px;
     transition-property: color, background-color, border-color, text-decoration-color, fill, stroke;
@@ -166,28 +165,15 @@ body {
 .login-switch a:hover {
   text-decoration: underline;
 }
-
-.btn-primary {
-    --tw-bg-opacity: 1;
-    background-color: lab(var(--primary-raw) / var(--tw-bg-opacity, 1));
-    --tw-text-opacity: 1;
-    color: lab(var(--primary-foreground-raw) / var(--tw-text-opacity, 1));
-}
-.btn {
+.signinbtn {
     display: inline-flex;
     align-items: center;
-    gap: 0.375rem;
-    border-radius: 0.5rem;
-    padding-left: 0.875rem;
-    padding-right: 0.875rem;
-    padding-top: 0.5rem;
-    padding-bottom: 0.5rem;
-    font-size: 0.875rem;
-    line-height: 1.25rem;
-    font-weight: 500;
+    border-radius: 8px;
     transition-property: all;
     transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
     transition-duration: 150ms;
+    background-color:#171717;
+    color:#fafafa;
 }
 
 @media (min-width: 1024px) {
