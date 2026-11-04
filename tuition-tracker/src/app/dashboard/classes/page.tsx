@@ -318,7 +318,7 @@ export default function ClassesPage() {
         title={editId ? 'Edit class' : 'New class'}
         icon="📚"
       >
-        <div className="form-group">
+        <div className="form-group pt-1">
           <label>Class / subject name</label>
           <input
             value={form.name}
@@ -326,7 +326,7 @@ export default function ClassesPage() {
             placeholder="A/L Physics – Batch B"
           />
         </div>
-        <div className="grid grid-cols-2 gap-2.5">
+        <div className="grid grid-cols-2 gap-2.5 pt-1">
           <div className="form-group">
             <label>Weekly day</label>
             <select
@@ -338,7 +338,7 @@ export default function ClassesPage() {
               ))}
             </select>
           </div>
-          <div className="form-group">
+          <div className="form-group pt-1">
             <label>Start time</label>
             <input
               type="time"
@@ -347,7 +347,7 @@ export default function ClassesPage() {
             />
           </div>
         </div>
-        <div className="grid grid-cols-2 gap-2.5">
+        <div className="grid grid-cols-2 gap-2.5 pt-1">
           <div className="form-group">
             <label>Duration (min)</label>
             <input
@@ -356,7 +356,7 @@ export default function ClassesPage() {
               onChange={(e) => setForm({ ...form, duration: e.target.value })}
             />
           </div>
-          <div className="form-group">
+          <div className="form-group pt-1">
             <label>Monthly fee (LKR)</label>
             <input
               type="number"
@@ -366,7 +366,7 @@ export default function ClassesPage() {
             />
           </div>
         </div>
-        <div className="form-group">
+        <div className="form-group pt-1">
           <label>Venue</label>
           <input
             value={form.venue}
@@ -374,17 +374,13 @@ export default function ClassesPage() {
             placeholder="Room 1"
           />
         </div>
-        <div className="form-group">
+        <div className="form-group pt-1">
           <label>Max students</label>
           <input
             type="number"
             value={form.max}
             onChange={(e) => setForm({ ...form, max: e.target.value })}
           />
-        </div>
-        <div className="mb-1 rounded-lg border border-accent/20 bg-accent/10 px-3.5 py-2.5 text-[13px] text-accent2">
-          ℹ️ The weekly day sets the default schedule. You can cancel or add
-          extra class days from the class calendar.
         </div>
         <div className="mt-4 flex justify-end gap-2">
           <button

@@ -189,7 +189,7 @@ body {
     position: relative;
     min-height: 100vh;
     overflow: hidden;
-    background: #e5e5e5; /* fallback if image fails */
+    background: #e5e5e5;
   }
 
   .login-hero-img {
@@ -215,4 +215,152 @@ body {
     background: radial-gradient(ellipse at 50% 0%, rgba(99, 102, 241, 0.08) 0%, transparent 70%),
       var(--background);
   }
+}
+
+.btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.375rem;
+    border-radius: 0.5rem;
+    padding-left: 0.875rem;
+    padding-right: 0.875rem;
+    padding-top: 0.5rem;
+    padding-bottom: 0.5rem;
+    font-size: 0.875rem;
+    line-height: 1.25rem;
+    font-weight: 500;
+    transition-property: all;
+    transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+    transition-duration: 150ms;
+}
+
+.btn-primary {
+    --tw-bg-opacity: 1;
+    background-color:#171717;
+    --tw-text-opacity: 1;
+    color: #fafafa;
+}
+
+.btn-outline {
+  @apply bg-transparent border border-border text-foreground hover:bg-card2;
+}
+
+.btn-danger {
+  @apply bg-red/10 text-red border border-red/25;
+}
+
+.card {
+  border-radius: 0.75rem;
+  border-width: 1px;
+  --tw-border-opacity: 1;
+  --tw-bg-opacity: 1;
+  background-color: lab(var(--card-raw) / var(--tw-bg-opacity, 1));
+  padding: 18px;
+  --tw-text-opacity: 1;
+  color: lab(var(--foreground-raw) / var(--tw-text-opacity, 1));
+}
+
+.light-surface {
+  background: var(--background);
+  color: var(--foreground);
+}
+.light-surface .text-white,
+.light-surface .text-slate-100,
+.light-surface .text-slate-200,
+.light-surface .text-slate-300 {
+  color: var(--foreground);
+}
+.light-surface .text-muted {
+  color: var(--muted-foreground);
+}
+.light-surface .bg-card2 {
+  background: var(--secondary);
+}
+.light-surface .bg-card {
+  background: var(--card);
+}
+.light-surface .border-border {
+  border-color: var(--border);
+}
+.light-surface .hover\:bg-white\/5:hover,
+.light-surface .hover\:bg-white\/\[0\.02\]:hover,
+.light-surface .hover\:bg-white\/\[0\.05\]:hover {
+  background-color: var(--secondary);
+}
+.light-surface .hover\:text-slate-200:hover {
+  color: var(--foreground);
+}
+.light-surface .bg-white\/\[0\.03\],
+.light-surface .bg-white\/\[0\.07\] {
+  background-color: var(--secondary);
+}
+.light-surface hr,
+.light-surface .border-border\/60 {
+  border-color: var(--border);
+}
+.light-surface input,
+.light-surface select,
+.light-surface textarea {
+  background: var(--secondary);
+  color: var(--foreground);
+  border-color: var(--border);
+}
+.light-surface ::placeholder {
+  color: var(--muted-foreground);
+  opacity: 0.8;
+}
+
+.light-surface .card {
+    background: var(--card);
+    border-color: #919191;
+}
+
+.form-group label {
+  margin-bottom: 0.25rem;
+  display: block;
+  font-size: 13px;
+  line-height: 1.4;
+  font-weight: 500;
+  --tw-text-opacity: 1;
+  color: lab(var(--muted-foreground-raw) / var(--tw-text-opacity, 1));
+}
+.light-surface .form-group label {
+  color: var(--muted-foreground);
+}
+
+.form-group input,
+.form-group select,
+.form-group textarea {
+  width: 100%;
+  border-radius: 0.5rem;
+  border-width: 1px;
+  --tw-border-opacity: 1;
+  border-color: lab(var(--border-raw) / var(--tw-border-opacity, 1));
+  --tw-bg-opacity: 1;
+  background-color: lab(var(--card2-raw) / var(--tw-bg-opacity, 1));
+  padding-left: 0.75rem;
+  padding-right: 0.75rem;
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+  --tw-text-opacity: 1;
+  color: lab(var(--foreground-raw) / var(--tw-text-opacity, 1));
+  outline: 2px solid transparent;
+  outline-offset: 2px;
+  transition-property: color, background-color, border-color, text-decoration-color, fill, stroke;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  transition-duration: 150ms;
+}
+.light-surface .form-group input,.light-surface 
+.form-group select,.light-surface 
+.form-group textarea {
+  background: var(--secondary);
+  border-color: var(--border);
+}
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus {
+  --tw-border-opacity: 1;
+  border-color: lab(var(--accent2-raw) / var(--tw-border-opacity, 1));
 }

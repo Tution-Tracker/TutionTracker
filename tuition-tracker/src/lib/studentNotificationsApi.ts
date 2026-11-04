@@ -25,7 +25,6 @@ export type StudentNotification = {
   msg: string;
   time: string;
   read: boolean;
-  [key: string]: unknown;
 };
 
 export type AddStudentNotificationInput = {

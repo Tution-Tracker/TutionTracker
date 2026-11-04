@@ -5,6 +5,7 @@ import StudentFormModal from '@/components/StudentFormModal';
 import ConfirmDialog from '@/components/ConfirmDialog';
 import { subscribeStudents, deleteStudent } from '@/lib/studentsApi';
 import type { Student } from '@/types/student';
+import { subscribeClasses, type ClassDoc } from '@/lib/classesApi';
 
 function initials(name: string): string {
   return (
@@ -23,6 +24,7 @@ export default function StudentsPage() {
   const [deleteTarget, setDeleteTarget] = useState<Student | null>(null);
   const [deleting, setDeleting] = useState(false);
   const [students, setStudents] = useState<Student[]>([]);
+  const [classes, setClasses] = useState<ClassDoc[]>([]);
   const [loading, setLoading] = useState(true);
   const [loadError, setLoadError] = useState('');
   const [search, setSearch] = useState('');
@@ -40,6 +42,19 @@ export default function StudentsPage() {
     );
     return () => unsubscribe();
   }, []);
+
+  useEffect(() => {
+    const unsubscribe = subscribeClasses(setClasses);
+    return () => unsubscribe();
+  }, []);
+
+  const classNameById = useMemo(() => {
+    const map: Record<string, string> = {};
+    classes.forEach((c) => {
+      map[c.id] = c.name;
+    });
+    return map;
+  }, [classes]);
 
   const filtered = useMemo(() => {
     const q = search.trim().toLowerCase();
@@ -92,7 +107,7 @@ export default function StudentsPage() {
           <div className="mt-1 text-sm text-gray-500">{countText}</div>
         </div>
         <button
-          className="rounded-lg bg-black px-4 py-2 text-sm text-white"
+          className="btn btn-primary"
           onClick={openAdd}
         >
           + Add student
@@ -152,18 +167,30 @@ export default function StudentsPage() {
                   <td className="px-3 py-2.5 text-xs text-gray-600">{s.nic || '—'}</td>
                   <td className="px-3 py-2.5 text-xs text-gray-600">{s.phone || '—'}</td>
                   <td className="px-3 py-2.5 text-xs text-gray-600">
-                    {s.classIds.length > 0 ? s.classIds.length : '—'}
+                    {s.classIds.length > 0 ? (
+                      <div className="flex flex-wrap gap-1">
+                        {s.classIds
+                          .filter((id) => classNameById[id])
+                          .map((id) => (
+                            <span key={id} className="rounded-full bg-gray-100 px-2 py-0.5 text-xs">
+                              {classNameById[id]}
+                            </span>
+                          ))}
+                      </div>
+                    ) : (
+                      '—'
+                    )}
                   </td>
                   <td className="px-3 py-2.5">
                     <div className="flex gap-1.5">
                       <button
-                        className="rounded-md border border-gray-300 px-2 py-1 text-xs"
+                        className="btn btn-outline btn-sm text-xs px-2 py-1"
                         onClick={() => openEdit(s)}
                       >
                         Edit
                       </button>
                        <button
-                        className="rounded-md border border-[#fca5a5] px-2 py-1 text-xs text-[#dc2626]"
+                        className="btn btn-danger px-2 py-1 text-xs"
                         onClick={() => setDeleteTarget(s)}
                       >
                         Delete
@@ -182,6 +209,7 @@ export default function StudentsPage() {
         onClose={() => setModalOpen(false)}
         student={editingStudent}
         allStudents={students}
+        classes={classes}
       />
 
       <ConfirmDialog

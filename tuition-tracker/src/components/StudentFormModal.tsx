@@ -5,6 +5,7 @@ import type { ChangeEvent } from 'react';
 import Modal from '@/components/Modal';
 import { addStudent, updateStudent } from '@/lib/studentsApi';
 import type { NewStudent, Student } from '@/types/student';
+import type { ClassDoc } from '@/lib/classesApi';
 
 type FormState = {
   first: string;
@@ -15,7 +16,7 @@ type FormState = {
   parent: string;
   school: string;
   grade: string;
-  classId: string;
+  classIds: string[];
   enrollDate: string;
   notes: string;
   billingStatus: string;
@@ -26,6 +27,7 @@ type StudentFormModalProps = {
   onClose: () => void;
   student: Student | null;
   allStudents?: Student[];
+  classes?: ClassDoc[];
 };
 
 // Today's date as YYYY-MM-DD, in the user's own timezone.
@@ -45,7 +47,7 @@ function emptyForm(): FormState {
     parent: '',
     school: '',
     grade: '',
-    classId: '',
+    classIds: [],
     enrollDate: todayLocal(),
     notes: '',
     billingStatus: 'none',
@@ -60,6 +62,7 @@ export default function StudentFormModal({
   onClose,
   student,
   allStudents = [],
+  classes = [],
 }: StudentFormModalProps) {
   const [form, setForm] = useState<FormState>(emptyForm());
   const [saving, setSaving] = useState(false);
@@ -81,7 +84,7 @@ export default function StudentFormModal({
         parent: student.parent || '',
         school: student.school || '',
         grade: student.grade || '',
-        classId: '',
+        classIds: student.classIds || [],
         enrollDate: student.enrollDate || '',
         notes: student.notes || '',
         billingStatus: student.billingStatus || 'none',
@@ -96,6 +99,17 @@ export default function StudentFormModal({
   ) {
     const { name, value } = e.target;
     setForm((prev) => ({ ...prev, [name]: value }));
+  }
+
+    function addClassId(id: string) {
+    if (!id) return;
+    setForm((prev) =>
+      prev.classIds.includes(id) ? prev : { ...prev, classIds: [...prev.classIds, id] }
+    );
+  }
+
+  function removeClassId(id: string) {
+    setForm((prev) => ({ ...prev, classIds: prev.classIds.filter((c) => c !== id) }));
   }
 
     async function handleSave() {
@@ -122,7 +136,8 @@ export default function StudentFormModal({
       return;
     }
 
-    const data: Omit<NewStudent, 'classIds'> = {
+    const data: NewStudent = {
+      classIds: form.classIds,
       name: `${form.first.trim()} ${form.last.trim()}`,
       email: emailLower,
       nic: form.nic.trim(),
@@ -137,15 +152,11 @@ export default function StudentFormModal({
 
     setSaving(true);
     try {
-      if (student) {
-        // Edit: keep the classes they already have, add the chosen one if any.
-        const classIds = new Set(student.classIds);
-        if (form.classId) classIds.add(form.classId);
-        await updateStudent(student.id, { ...data, classIds: Array.from(classIds) });
-      } else {
-        // Add: a brand new student.
-        await addStudent({ ...data, classIds: form.classId ? [form.classId] : [] });
-      }
+          if (student) {
+            await updateStudent(student.id, data);
+          } else {
+            await addStudent(data);
+          }
       onClose();
     } catch (err) {
       console.error(err);
@@ -202,10 +213,55 @@ export default function StudentFormModal({
       </div>
 
       <div className="mt-3">
-        <label className={labelClass}>Assign to class</label>
-        <select className={inputClass} name="classId" value={form.classId} onChange={handleChange}>
-          <option value="">— Select —</option>
-        </select>
+                <label className={labelClass}>Classes</label>
+        {classes.length === 0 ? (
+          <p className="text-xs text-gray-500">
+            No classes yet. Create one on the Classes page first.
+          </p>
+        ) : (
+           <>
+            <select
+              className={inputClass}
+              value=""
+              onChange={(e) => addClassId(e.target.value)}
+            >
+              <option value="">— Add a class —</option>
+              {classes
+                .filter((c) => !form.classIds.includes(c.id))
+                .map((c) => (
+                  <option key={c.id} value={c.id}>
+                    {c.name}
+                    {c.archived ? ' (archived)' : ''}
+                  </option>
+                ))}
+            </select>
+
+            {form.classIds.length > 0 && (
+              <div className="mt-2 flex flex-wrap gap-1.5">
+                {form.classIds.map((id) => {
+                  const c = classes.find((x) => x.id === id);
+                  if (!c) return null;
+                  return (
+                    <span
+                      key={id}
+                      className="flex items-center gap-1 rounded-full bg-gray-100 px-2.5 py-1 text-xs"
+                    >
+                      {c.name}
+                      <button
+                        type="button"
+                        aria-label={`Remove ${c.name}`}
+                        className="text-gray-500 hover:text-black"
+                        onClick={() => removeClassId(id)}
+                      >
+                        ×
+                      </button>
+                    </span>
+                  );
+                })}
+              </div>
+            )}
+          </>
+        )}
       </div>
 
       <div className="mt-3">
@@ -233,7 +289,7 @@ export default function StudentFormModal({
             Cancel
         </button>
         <button
-            className="rounded-lg bg-black px-4 py-2 text-sm text-white disabled:opacity-50"
+            className="btn btn-primary"
             onClick={handleSave}
             disabled={saving}
         >

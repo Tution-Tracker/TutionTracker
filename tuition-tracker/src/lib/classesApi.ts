@@ -30,7 +30,6 @@ export type ClassDoc = {
   venue?: string;
   max?: number;
   archived?: boolean;
-  [key: string]: unknown;
 };
 
 /** Data used when creating / updating a class (no `id`). */

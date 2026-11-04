@@ -43,7 +43,7 @@ export function ToastProvider({ children }: { children: ReactNode }) {
     <ToastContext.Provider value={{ toast }}>
       {children}
       {msg && (
-        <div className="light-surface fixed bottom-5.5 right-5.5 bg-card2 border border-border rounded-xl px-4 py-2.5 text-sm text-foreground z-[999] flex items-center gap-2 shadow-2xl">
+        <div className="light-surface fixed bottom-6 right-6 bg-card2 border border-border rounded-xl px-4 py-2.5 text-sm text-foreground z-[999] flex items-center gap-2 shadow-2xl">
           <span className={colors[type] || colors.green}>●</span>
           {msg}
         </div>
