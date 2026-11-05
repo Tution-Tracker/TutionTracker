@@ -69,7 +69,7 @@ export default function StudentFormModal({
   const [error, setError] = useState('');
 
   // Every time the popup opens, start with a clean form.
-    useEffect(() => {
+  useEffect(() => {
     if (!open) return;
     setError('');
 
@@ -101,7 +101,7 @@ export default function StudentFormModal({
     setForm((prev) => ({ ...prev, [name]: value }));
   }
 
-    function addClassId(id: string) {
+  function addClassId(id: string) {
     if (!id) return;
     setForm((prev) =>
       prev.classIds.includes(id) ? prev : { ...prev, classIds: [...prev.classIds, id] }
@@ -112,7 +112,7 @@ export default function StudentFormModal({
     setForm((prev) => ({ ...prev, classIds: prev.classIds.filter((c) => c !== id) }));
   }
 
-    async function handleSave() {
+  async function handleSave() {
     setError('');
 
     if (!form.first.trim() || !form.last.trim()) {
@@ -126,8 +126,15 @@ export default function StudentFormModal({
       return;
     }
 
-    // Two students with the same email would make login ambiguous.
     const emailLower = form.email.trim().toLowerCase();
+
+    // Basic format check — must contain @ and at least one dot after it
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailLower)) {
+      setError('Please enter a valid email address (e.g. student@example.com).');
+      return;
+    }
+
+    // Two students with the same email would make login ambiguous.
     const clash = allStudents.find(
       (s) => s.email.trim().toLowerCase() === emailLower && s.id !== student?.id
     );
@@ -152,11 +159,11 @@ export default function StudentFormModal({
 
     setSaving(true);
     try {
-          if (student) {
-            await updateStudent(student.id, data);
-          } else {
-            await addStudent(data);
-          }
+      if (student) {
+        await updateStudent(student.id, data);
+      } else {
+        await addStudent(data);
+      }
       onClose();
     } catch (err) {
       console.error(err);
@@ -167,59 +174,104 @@ export default function StudentFormModal({
   }
 
   return (
-      <Modal open={open} onClose={onClose} title={student ? 'Edit student' : 'Enroll student'}>
+    <Modal open={open} onClose={onClose} title={student ? 'Edit student' : 'Enroll student'}>
       <div className="grid grid-cols-2 gap-3">
-        <div>
+        <div className="form-group">
           <label className={labelClass}>First name</label>
-          <input className={inputClass} name="first" value={form.first} onChange={handleChange} placeholder="Kasun" />
+          <input
+            className={inputClass}
+            name="first"
+            value={form.first}
+            onChange={handleChange}
+            placeholder="Kasun"
+          />
         </div>
-        <div>
+        <div className="form-group">
           <label className={labelClass}>Last name</label>
-          <input className={inputClass} name="last" value={form.last} onChange={handleChange} placeholder="Perera" />
+          <input
+            className={inputClass}
+            name="last"
+            value={form.last}
+            onChange={handleChange}
+            placeholder="Perera"
+          />
         </div>
       </div>
 
       <div className="mt-3 grid grid-cols-2 gap-3">
-        <div>
+        <div className="form-group">
           <label className={labelClass}>Email *</label>
-          <input className={inputClass} type="email" name="email" value={form.email} onChange={handleChange} placeholder="student@example.com" />
+          <input
+            className={inputClass}
+            type="email"
+            name="email"
+            value={form.email}
+            onChange={handleChange}
+            placeholder="student@example.com"
+          />
         </div>
-        <div>
+        <div className="form-group">
           <label className={labelClass}>NIC *</label>
-          <input className={inputClass} name="nic" value={form.nic} onChange={handleChange} placeholder="200012345678" />
+          <input
+            className={inputClass}
+            name="nic"
+            value={form.nic}
+            onChange={handleChange}
+            placeholder="200012345678"
+          />
         </div>
       </div>
 
       <div className="mt-3 grid grid-cols-2 gap-3">
-        <div>
+        <div className="form-group">
           <label className={labelClass}>Phone</label>
-          <input className={inputClass} name="phone" value={form.phone} onChange={handleChange} />
+          <input
+            className={inputClass}
+            name="phone"
+            value={form.phone}
+            onChange={handleChange}
+          />
         </div>
-        <div>
+        <div className="form-group">
           <label className={labelClass}>Parent phone</label>
-          <input className={inputClass} name="parent" value={form.parent} onChange={handleChange} />
+          <input
+            className={inputClass}
+            name="parent"
+            value={form.parent}
+            onChange={handleChange}
+          />
         </div>
       </div>
 
       <div className="mt-3 grid grid-cols-2 gap-3">
-        <div>
+        <div className="form-group">
           <label className={labelClass}>School</label>
-          <input className={inputClass} name="school" value={form.school} onChange={handleChange} />
+          <input
+            className={inputClass}
+            name="school"
+            value={form.school}
+            onChange={handleChange}
+          />
         </div>
-        <div>
+        <div className="form-group">
           <label className={labelClass}>Grade</label>
-          <input className={inputClass} name="grade" value={form.grade} onChange={handleChange} />
+          <input
+            className={inputClass}
+            name="grade"
+            value={form.grade}
+            onChange={handleChange}
+          />
         </div>
       </div>
 
-      <div className="mt-3">
-                <label className={labelClass}>Classes</label>
+      <div className="mt-3 form-group">
+        <label className={labelClass}>Classes</label>
         {classes.length === 0 ? (
           <p className="text-xs text-gray-500">
             No classes yet. Create one on the Classes page first.
           </p>
         ) : (
-           <>
+          <>
             <select
               className={inputClass}
               value=""
@@ -264,38 +316,58 @@ export default function StudentFormModal({
         )}
       </div>
 
-      <div className="mt-3">
+      <div className="mt-3 form-group">
         <label className={labelClass}>Fees</label>
-        <select className={inputClass} name="billingStatus" value={form.billingStatus} onChange={handleChange}>
+        <select
+          className={inputClass}
+          name="billingStatus"
+          value={form.billingStatus}
+          onChange={handleChange}
+        >
           <option value="none">Normal (fees apply)</option>
           <option value="free">Free (no fees tracked)</option>
         </select>
       </div>
 
-      <div className="mt-3">
+      <div className="mt-3 form-group">
         <label className={labelClass}>Enrolled date</label>
-        <input className={inputClass} type="date" name="enrollDate" value={form.enrollDate} onChange={handleChange} />
+        <input
+          className={inputClass}
+          type="date"
+          name="enrollDate"
+          value={form.enrollDate}
+          onChange={handleChange}
+        />
       </div>
 
-      <div className="mt-3">
+      <div className="mt-3 form-group">
         <label className={labelClass}>Notes</label>
-        <textarea className={inputClass} rows={2} name="notes" value={form.notes} onChange={handleChange} />
+        <textarea
+          className={inputClass}
+          rows={2}
+          name="notes"
+          value={form.notes}
+          onChange={handleChange}
+        />
       </div>
 
       {error && <p className="mt-3 text-sm text-red-600">{error}</p>}
 
-    <div className="mt-5 flex justify-end gap-2">
-        <button className="rounded-lg border border-gray-300 px-4 py-2 text-sm" onClick={onClose}>
-            Cancel
+      <div className="mt-5 flex justify-end gap-2">
+        <button
+          className="rounded-lg border border-gray-300 px-4 py-2 text-sm"
+          onClick={onClose}
+        >
+          Cancel
         </button>
         <button
-            className="btn btn-primary"
-            onClick={handleSave}
-            disabled={saving}
+          className="btn btn-primary"
+          onClick={handleSave}
+          disabled={saving}
         >
-        {saving ? 'Saving…' : 'Save'}
+          {saving ? 'Saving…' : 'Save'}
         </button>
-    </div>
+      </div>
     </Modal>
   );
 }

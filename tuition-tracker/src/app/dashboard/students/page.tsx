@@ -148,10 +148,10 @@ export default function StudentsPage() {
               </tr>
             ) : (
               filtered.map((s) => (
-                <tr key={s.id} className="border-b border-gray-100 last:border-none">
+                <tr key={s.id} className="border-b border-border/60 last:border-none hover:bg-white/[0.02]">
                   <td className="px-3 py-2.5">
                     <div className="flex items-center gap-2.5">
-                      <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-gray-100 text-xs font-bold">
+                      <div className="w-8 h-8 rounded-full bg-accent/20 text-accent2 flex items-center justify-center text-xs font-bold shrink-0">
                         {initials(s.name)}
                       </div>
                       <div>
