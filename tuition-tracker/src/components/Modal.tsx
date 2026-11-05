@@ -6,10 +6,11 @@ type ModalProps = {
   open: boolean;
   onClose: () => void;
   title?: string;
+  icon?: string;
   children: ReactNode;
 };
 
-export default function Modal({ open, onClose, title, children }: ModalProps) {
+export default function Modal({ open, onClose, title, icon, children }: ModalProps)  {
   if (!open) return null;
 
   return (
@@ -19,8 +20,13 @@ export default function Modal({ open, onClose, title, children }: ModalProps) {
         if (e.target === e.currentTarget) onClose();
       }}
     >
-      <div className="max-h-[90vh] w-[90%] max-w-[480px] overflow-y-auto rounded-2xl bg-white p-6">
-        {title && <h2 className="mb-4 text-lg font-bold">{title}</h2>}
+      <div className="max-h-[90vh] w-[90%] max-w-[480px] overflow-y-auto rounded-2xl bg-card2 p-6">
+          {title && (
+            <h2 className="mb-4 flex items-center gap-2 text-lg font-bold">
+              {icon && <span>{icon}</span>}
+              {title}
+            </h2>
+          )}
         {children}
       </div>
     </div>
