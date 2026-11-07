@@ -3,6 +3,7 @@ import type { Metadata } from 'next';
 import type { ReactNode } from 'react';
 
 import { AuthProvider } from '@/context/Authentication';
+import { ToastProvider } from '@/context/ToastContext';
 
 export const metadata: Metadata = {
   title: 'Tuition Tracker',
@@ -25,7 +26,7 @@ export default function RootLayout({
 
       <body>
         <AuthProvider>
-              {children}
+              <ToastProvider>{children}</ToastProvider>
         </AuthProvider>
       </body>
     </html>
