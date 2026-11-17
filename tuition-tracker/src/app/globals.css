@@ -249,6 +249,12 @@ body {
   @apply bg-red/10 text-red border border-red/25;
 }
 
+.btn-success {
+  @apply bg-green/10 text-green border border-green/25;
+}
+
+
+
 .card {
   border-radius: 0.75rem;
   border-width: 1px;
