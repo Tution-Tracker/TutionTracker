@@ -253,6 +253,8 @@ body {
   @apply bg-green/10 text-green border border-green/25;
 }
 
+
+
 .card {
   border-radius: 0.75rem;
   border-width: 1px;

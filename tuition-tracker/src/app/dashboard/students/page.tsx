@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useMemo, useState } from 'react';
+import Link from 'next/link';
 import StudentFormModal from '@/components/StudentFormModal';
 import ConfirmDialog from '@/components/ConfirmDialog';
 import { subscribeStudents, deleteStudent } from '@/lib/studentsApi';
@@ -155,7 +156,12 @@ export default function StudentsPage() {
                         {initials(s.name)}
                       </div>
                       <div>
-                        <div className="text-sm font-medium">{s.name}</div>
+                         <Link
+                           href={`/dashboard/students/${s.id}`}
+                           className="text-sm font-medium hover:underline"
+                         >
+                           {s.name}
+                         </Link>
                         <div className="text-xs text-gray-500">
                           {s.school || ''}
                           {s.grade ? ` · ${s.grade}` : ''}
