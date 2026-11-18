@@ -44,7 +44,6 @@ export async function logActivity(
   }
 }
 
-/** Best-effort lookup of a document's display name (for log summaries). */
 export async function nameOf(collectionName: string, id: string, field = 'name'): Promise<string> {
   try {
     const snap = await getDoc(doc(db, collectionName, id));

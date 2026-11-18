@@ -35,7 +35,7 @@ export default function ConfirmDialog({
             Cancel
           </button>
           <button
-            className="rounded-lg bg-[#dc2626] px-4 py-2 text-sm text-white disabled:opacity-50"
+            className="btn btn-danger px-2 py-1 text-xs"
             onClick={onConfirm}
             disabled={busy}
           >

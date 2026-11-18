@@ -10,21 +10,16 @@ import {
 import { auth } from '@/lib/firebase';
 import { logActivity, actorLabelFor } from '@/lib/activityLog';
 
+
+type Role = 'admin' | null;
+
 interface AuthContextValue {
   user: User | null;
-  role: string | null;
+  role: Role;
   isAdmin: boolean;
   loading: boolean;
   login: (email: string, password: string) => Promise<void>;
   logout: () => Promise<void>;
-}
-
-interface AuthProviderProps {
-  children: ReactNode;
-}
-
-interface AppAuthError extends Error {
-  code: string;
 }
 
 const AuthContext = createContext<AuthContextValue>({
@@ -36,24 +31,24 @@ const AuthContext = createContext<AuthContextValue>({
   logout: async () => {},
 });
 
-export function AuthProvider({ children }: AuthProviderProps) {
+export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
-  const [role, setRole] = useState<string | null>(null);
-  const [loading, setLoading] = useState<boolean>(true);
+  const [role, setRole] = useState<Role>(null);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const unsub = onIdTokenChanged(auth, async (u: User | null) => {
+    const unsub = onIdTokenChanged(auth, async (u) => {
       if (!u) {
         setUser(null);
         setRole(null);
         setLoading(false);
         return;
       }
-      let claimRole: string | null = null;
+      let claimRole: Role = null;
       try {
         const tok = await u.getIdTokenResult();
-        claimRole = tok.claims.role as string | null;
-      } catch (e: unknown) {
+        claimRole = (tok.claims.role as Role) || null;
+      } catch (e) {
         claimRole = null;
       }
       if (claimRole !== 'admin') {
@@ -75,7 +70,9 @@ export function AuthProvider({ children }: AuthProviderProps) {
     const tok = await cred.user.getIdTokenResult(true);
     if (tok.claims.role !== 'admin') {
       await signOut(auth);
-      const err = new Error('This account does not have admin access.') as AppAuthError;
+      const err = new Error('This account does not have admin access.') as Error & {
+        code: string;
+      };
       err.code = 'app/not-admin';
       throw err;
     }

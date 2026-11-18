@@ -3,6 +3,7 @@ import { adminAuth } from '@/lib/firebaseAdmin';
 
 type Role = 'admin' | 'student';
 
+
 async function verifyRole(request: Request, role: Role): Promise<DecodedIdToken | null> {
   const header = request.headers.get('authorization') || '';
   const idToken = header.startsWith('Bearer ') ? header.slice(7) : null;

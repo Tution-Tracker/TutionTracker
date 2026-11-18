@@ -4,12 +4,11 @@ import crypto from 'crypto';
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
 import { adminDb, adminAuth, adminProjectId } from '@/lib/firebaseAdmin';
-import { getClientIp, isLimited, recordHit, resetKey } from '../../../../lib/rateLimit';
+import { getClientIp, isLimited, recordHit, resetKey } from '@/lib/rateLimit';
 
 const WINDOW_MS = 15 * 60 * 1000;
 const MAX_FAILS_PER_EMAIL = 5;
-const MAX_FAILS_PER_IP = 30; // classmates share one Wi-Fi/IP, so keep this generous
-
+const MAX_FAILS_PER_IP = 30;
 const GENERIC_FAIL: { error: string } = {
   error: "We couldn't sign you in with those details. Check them, or ask your tutor.",
 };
@@ -18,7 +17,7 @@ function safeEqual(a: unknown, b: unknown): boolean {
   const ab = Buffer.from(String(a));
   const bb = Buffer.from(String(b));
   if (ab.length !== bb.length) {
-    crypto.timingSafeEqual(ab, ab); // keep timing roughly flat
+    crypto.timingSafeEqual(ab, ab);
     return false;
   }
   return crypto.timingSafeEqual(ab, bb);
@@ -64,7 +63,6 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
     );
   }
 
-  // Dev diagnostic: Admin SDK project must match the browser's project.
   const webProjectId = process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID;
   if (webProjectId && adminProjectId && webProjectId !== adminProjectId) {
     return serverError(
@@ -79,7 +77,6 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
     candidates = q.docs;
 
     if (candidates.length === 0) {
-      // Fallback for legacy records whose email was saved with different case.
       const all = await adminDb.collection('students').get();
       candidates = all.docs.filter(
         (d) => String(d.data().email || '').trim().toLowerCase() === email
