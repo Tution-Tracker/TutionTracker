@@ -133,8 +133,8 @@ export default function AdminProfilePage() {
   return (
     <div className="max-w-4xl">
       <div className="flex items-center gap-4 mb-5">
-        <div className="w-14 h-14 rounded-full bg-accent/[0.15] text-accent2 flex items-center justify-center font-bold text-xl shrink-0">
-          {initial}
+        <div className="w-14 h-14 rounded-full bg-accent/[0.15] flex items-center justify-center shrink-0 overflow-hidden">
+          <img src="/icons/user.png" alt="Admin profile" className="w-full h-full object-cover"/>
         </div>
         <div className="min-w-0">
           <h1 className="text-xl font-bold text-white truncate">{saved.name || 'Admin profile'}</h1>
@@ -237,7 +237,7 @@ export default function AdminProfilePage() {
   );
 }
 
-/* ───────────────────────── Class places ───────────────────────── */
+// class places
 
 const EMPTY_PLACE = { name: '', address: '', notes: '' };
 
@@ -315,7 +315,9 @@ function PlacesTab({ uid, places, toast }: { uid: string | undefined; places: Pl
           <div className="flex flex-col gap-2.5">
             {places.map((p) => (
               <div key={p.id} className="card flex items-start gap-3">
-                <div className="text-lg leading-none mt-0.5">📍</div>
+                <div className="text-lg leading-none mt-0.5">
+                  <img src="/icons/place.png" alt="Place" className="w-5 h-5" />
+                </div>
                 <div className="min-w-0 flex-1">
                   <div className="text-sm font-semibold text-white">{p.name}</div>
                   {p.address && <div className="text-sm text-muted mt-0.5">{p.address}</div>}
@@ -387,7 +389,7 @@ function PlacesTab({ uid, places, toast }: { uid: string | undefined; places: Pl
   );
 }
 
-/* ───────────────────────── Security ───────────────────────── */
+// security tab
 
 function SecurityTab({ user, toast }: { user: User | null; toast: ToastFn }) {
   // sign-in email
