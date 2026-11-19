@@ -1,9 +1,10 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import { useAuth } from '@/context/Authentication';
+import { useAdminProfile } from '@/lib/useAdminProfile';
 
 // Notification functionality temporarily disabled
 // import { subscribeNotifications } from '@/lib/notificationsApi';
@@ -15,7 +16,7 @@ const NAV_SECTIONS = [
     items: [
       {
         href: '/dashboard',
-        icon: '📊',
+        icon: '/sidebar/dashboard.png',
         name: 'Dashboard',
       },
     ],
@@ -25,27 +26,27 @@ const NAV_SECTIONS = [
     items: [
       {
         href: '/dashboard/classes',
-        icon: '📚',
+        icon: '/sidebar/classes.png',
         name: 'Classes',
       },
       {
         href: '/dashboard/calendar',
-        icon: '🗓',
+        icon: '/sidebar/calendar.png',
         name: 'Calendar',
       },
       {
         href: '/dashboard/students',
-        icon: '👥',
+        icon: '/sidebar/student.png',
         name: 'Students',
       },
       {
         href: '/dashboard/attendance',
-        icon: '✅',
+        icon: '/sidebar/attendance.png',
         name: 'Attendance',
       },
       {
         href: '/dashboard/exams',
-        icon: '📝',
+        icon: '/sidebar/exam.png',
         name: 'Exams',
       },
     ],
@@ -55,7 +56,7 @@ const NAV_SECTIONS = [
     items: [
       {
         href: '/dashboard/fees',
-        icon: '💳',
+        icon: '/sidebar/fees.png',
         name: 'Fees',
       },
     ],
@@ -72,7 +73,8 @@ export default function Sidebar({
   onClose,
 }: SidebarProps) {
   const pathname = usePathname();
-  const { user, logout } = useAuth();
+  const { logout } = useAuth();
+  const { profile } = useAdminProfile();
   const router = useRouter();
 
   /*
@@ -88,12 +90,19 @@ export default function Sidebar({
    * ).length;
    */
 
+  // Get the first letter of the admin's name
+  const adminInitial =
+    ((profile?.name || '').trim()[0] || 'A').toUpperCase();
+
+  // Highlight profile when currently on the profile page
+  const onProfile = pathname === '/dashboard/profile';
+
   // Close mobile sidebar when route changes
   useEffect(() => {
     if (open && onClose) {
       onClose();
     }
-  }, [pathname]);
+  }, [pathname, open, onClose]);
 
   async function handleLogout() {
     await logout();
@@ -114,7 +123,19 @@ export default function Sidebar({
       {/* Header */}
       <div className="px-4 py-4 border-b border-navBorder flex items-center justify-between font-bold text-foreground text-[15px]">
         <div className="flex items-center gap-2">
-          <span className="text-accent2 text-xl"><img src="/icons/student.png" alt="logo" style={{ height: '20px',width: '20px',objectFit: 'contain',display: 'block',}}/></span>
+          <span className="text-accent2 text-xl">
+            <img
+              src="/icons/student.png"
+              alt="logo"
+              style={{
+                height: '20px',
+                width: '20px',
+                objectFit: 'contain',
+                display: 'block',
+              }}
+            />
+          </span>
+
           TuitionTracker
         </div>
 
@@ -154,7 +175,14 @@ export default function Sidebar({
                     }
                   `}
                 >
-                  <span>{item.icon}</span>
+                  <span>
+                    <img
+                      src={item.icon}
+                      alt={item.name}
+                      className="w-5 h-5 object-contain"
+                    />
+                  </span>
+
                   {item.name}
                 </Link>
               );
@@ -174,7 +202,14 @@ export default function Sidebar({
             onClick={() => setNotifOpen(true)}
             className="w-full flex items-center gap-2.5 px-3 py-2 rounded-lg text-[13.5px] mb-0.5 transition-all text-muted hover:bg-card2 hover:text-foreground"
           >
-            <span>🔔</span>
+            <span>
+              <img
+                src="/sidebar/notifications.png"
+                alt="Notifications"
+                className="w-5 h-5"
+              />
+            </span>
+
             Notifications
 
             {unreadCount > 0 && (
@@ -188,23 +223,42 @@ export default function Sidebar({
 
       {/* User footer */}
       <div className="px-3.5 py-3 border-t border-navBorder flex items-center gap-2.5">
-        <div className="w-8 h-8 rounded-full bg-accent/[0.15] text-accent2 flex items-center justify-center font-bold text-[13px]">
-          {(user?.email || 'T')[0].toUpperCase()}
-        </div>
 
+          {/* Admin profile avatar */}
+          <Link
+            href="/dashboard/profile"
+            onClick={onClose}
+            title="Admin profile"
+            aria-label="Open admin profile"
+            className={`
+              w-8 h-8 rounded-full
+              bg-accent/[0.15]
+              flex items-center justify-center
+              overflow-hidden
+              transition-all
+              hover:ring-2 hover:ring-accent2/40
+              ${onProfile ? 'ring-2 ring-accent2' : ''}
+            `}
+          >
+            <img
+              src="/icons/user.png"
+              alt="Admin profile"
+              className="w-full h-full object-cover"
+            />
+          </Link>
+
+        {/* Admin name */}
         <div className="min-w-0">
-          <div className="text-[13px] font-semibold text-foreground truncate">
-            {user?.email || 'Tutor'}
-          </div>
-
-          <div className="text-[13px] text-muted">
-            Tutor
+          <div className="text-[13.5px] font-semibold text-foreground truncate">
+            {profile?.name || 'Admin'}
           </div>
         </div>
 
+        {/* Logout */}
         <button
           onClick={handleLogout}
           title="Logout"
+          aria-label="Logout"
           className="ml-auto text-muted hover:text-red text-lg"
         >
           <i className="ti ti-logout"></i>
@@ -223,4 +277,3 @@ export default function Sidebar({
     </div>
   );
 }
-

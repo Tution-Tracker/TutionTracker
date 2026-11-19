@@ -1,8 +1,8 @@
-# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
-
-# dependencies
-/node_modules
-/.pnp
+# ==========================================
+# Dependencies
+# ==========================================
+node_modules/
+.pnp
 .pnp.*
 .yarn/*
 !.yarn/patches
@@ -10,33 +10,164 @@
 !.yarn/releases
 !.yarn/versions
 
-# testing
-/coverage
+# npm
+.npm/
+package-lock.json
 
-# next.js
-/.next/
-/out/
+# pnpm
+.pnpm-store/
+pnpm-debug.log*
 
-# production
-/build
+# Yarn
+.yarn/install-state.gz
+.yarn/build-state.yml
+.yarn/cache/
 
-# misc
-.DS_Store
-*.pem
+# ==========================================
+# Next.js
+# ==========================================
+.next/
+out/
+.vercel/
 
-# debug
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
-.pnpm-debug.log*
+# ==========================================
+# Production / Build
+# ==========================================
+dist/
+build/
+release/
+tmp/
+temp/
 
-# vercel
-.vercel
-
-# typescript
+# ==========================================
+# TypeScript
+# ==========================================
 *.tsbuildinfo
 next-env.d.ts
 
+# ==========================================
+# Environment Variables / Secrets
+# ==========================================
 .env
-.env.local
-.env.development.local
+.env.*
+!.env.example
+!.env.template
+
+# ==========================================
+# Testing
+# ==========================================
+coverage/
+.nyc_output/
+.vitest/
+playwright-report/
+test-results/
+cypress/screenshots/
+cypress/videos/
+
+# ==========================================
+# Logs
+# ==========================================
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+# ==========================================
+# Cache
+# ==========================================
+.cache/
+.parcel-cache/
+.eslintcache
+.stylelintcache
+.vite/
+.turbo/
+.tscache/
+
+# ==========================================
+# IDE / Editors
+# ==========================================
+.vscode/*
+!.vscode/settings.json
+!.vscode/extensions.json
+!.vscode/tasks.json
+!.vscode/launch.json
+
+.idea/
+*.iml
+*.iws
+*.ipr
+
+# ==========================================
+# OS Files
+# ==========================================
+.DS_Store
+.DS_Store?
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# ==========================================
+# Editor Temporary Files
+# ==========================================
+*.swp
+*.swo
+*.swn
+*.tmp
+*.temp
+*~
+.#*
+
+# ==========================================
+# Debug
+# ==========================================
+debug/
+*.stackdump
+
+# ==========================================
+# Vercel
+# ==========================================
+.vercel/
+
+# ==========================================
+# Firebase
+# ==========================================
+.firebase/
+
+
+# ==========================================
+# Mac / Linux
+# ==========================================
+.Trashes/
+.fseventsd/
+.directory
+
+
+
+# ==========================================
+# Python (if used for scripts/tools)
+# ==========================================
+__pycache__/
+*.py[cod]
+*$py.class
+.venv/
+venv/
+env/
+ENV/
+.pytest_cache/
+.mypy_cache/
+
+# ==========================================
+# Generated files
+# ==========================================
+generated/
+*.generated.*
+*.gen.*
+
+# ==========================================
+# Local configuration
+# ==========================================
+*.local
+.local/
